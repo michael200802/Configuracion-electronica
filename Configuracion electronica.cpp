@@ -52,7 +52,7 @@ void text_box_number(string&num,int&x,int&y,int&topM,int&topm,int&cf){
     //Ciclo while 
     while (true)
     {
-        //S aumenta a i, hasta que este sea mayor que 254
+        //Se aumenta a i, hasta que este sea mayor que 254
         for (unsigned char i = 0; i < top_for; i++)
         {
             //Si el valor ascii de i es igual al valor ascii de la tecla pulsada por el usuario
