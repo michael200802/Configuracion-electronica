@@ -63,7 +63,7 @@ void text_box_number(string&num,int&x,int&y,int&topM,int&topm,int&cf){
                 {
                 case 48:
                     num[p] = '0';
-                    if (atoi(num.c_str()) < topM && p != 30 || p == 0)
+                    if (atoi(num.c_str()) < topM && p != 10 || p == 0)
                     {
                         p = p + 1;
                         cout<<"0";
