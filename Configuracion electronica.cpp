@@ -1,7 +1,9 @@
+//Hola xd
 #include<iostream>
 #include<stdlib.h>
 #include<string.h>
 #include<windows.h>
+#include<sstream>
 #include<conio.h>
 
 using namespace std;
@@ -12,18 +14,24 @@ void text_box_number(string&num,int&x,int&y,int&topM,int&topm,int&cf);
 
 void input(int&numero);
 
-void semidesarrollada(int numero);
+string semidesarrollada(int numero);
 
-int abreviada(int numero);
+void abreviada(int numero,string&semi);
+
+void orbitales(string&semi,int&numero);
 
 int main(){
 	system("title Menu/Configuracion electronica");
     int x;
+    string configuracion_electronica_semi;
     input(x);
-    semidesarrollada(x);
-    abreviada(x);
-    
+    configuracion_electronica_semi = semidesarrollada(x);
+    abreviada(x,configuracion_electronica_semi);
+    orbitales(configuracion_electronica_semi,x);
+    cout<<endl;
     system("pause");
+    system("cls");
+    main();
     return 0;
 }
 
@@ -52,7 +60,7 @@ void text_box_number(string&num,int&x,int&y,int&topM,int&topm,int&cf){
     //Ciclo while 
     while (true)
     {
-        //Se aumenta a i, hasta que este sea mayor que 254
+        //S aumenta a i, hasta que este sea mayor que 254
         for (unsigned char i = 0; i < top_for; i++)
         {
             //Si el valor ascii de i es igual al valor ascii de la tecla pulsada por el usuario
@@ -316,9 +324,14 @@ void input(int&numero){
     numero = atoi(in_put.c_str());
 }
 
-void semidesarrollada(int numero){
+string semidesarrollada(int numero){
     //Presentamos el titulo
     cout<<"Semidesarrollada: \n";
+
+    stringstream ss;
+    streambuf* backup = cout.rdbuf();
+    cout.rdbuf(ss.rdbuf());
+
     //Serie de condidionales que imprimiran la configuracion electronica del elemento en cuestion
     if (numero - 2 >= 0)
     {
@@ -606,10 +619,200 @@ void semidesarrollada(int numero){
         
     }
 
+    cout.rdbuf(backup);
+    cout << ss.rdbuf();
+
+    return ss.str();
 }
 
 
-int abreviada(int numero){
+void abreviada(int numero,string&semi){
+
     //Presentamos el titulo
     cout<<endl<<"Abreviada: \n";
+    
+    if (numero <= 2)
+    {
+        cout<<semi;
+    }
+    else
+    {
+        if (numero > 2 && numero <= 10)
+        {
+            cout<<"[He] ";
+            for (int i = 4; i < semi.length(); i++)
+            {
+                cout<<semi[i];
+            }
+
+        }
+        else
+        {
+            if (numero > 10 && numero <= 18)
+            {
+            	cout<<"[Ne] ";
+                for (int i = 12; i < semi.length(); i++)
+                {
+                    cout<<semi[i];
+                }
+                
+            }
+            else
+            {
+                if (numero > 18 && numero <= 36)
+                {
+                    cout<<"[Ar] ";
+                    for (int i = 20; i < semi.length(); i++)
+                    {
+                        cout<<semi[i];
+                    }
+                    
+                }
+                else
+                {
+                    if (numero > 36 && numero <= 54)
+                    {
+                        cout<<"[Kr] ";
+                        for (int i = 33; i < semi.length(); i++)
+                        {
+                            cout<<semi[i];
+                        }
+                        
+                    }
+                    else
+                    {
+                        if (numero > 54 && numero <= 86)
+                        {
+                            cout<<"[Xe] ";
+                            for (int i = 46; i < semi.length(); i++)
+                            {
+                                cout<<semi[i];
+                            }
+                            
+                        }
+                        else
+                        {
+                            if (numero > 86 && numero <= 118)
+                            {
+                                cout<<"[Rn] ";
+                                for (int i = 64; i < semi.length(); i++)
+                                {
+                                    cout<<semi[i];
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+        
+    }
+    
 }
+
+void orbitales(string&semi,int&numero)
+{
+    cout<<"\nOrbitales: \n";
+    string num = "  ";
+    int start = 0;
+
+    if (numero > 2 && numero <= 10)
+    {
+        cout<<"[He] ";
+        start = 4;
+    }
+    else
+    {
+        if (numero > 10 && numero <= 18)
+        {
+            cout<<"[Ne] ";
+            start = 12;
+        }
+        else
+        {
+            if (numero > 18 && numero <= 36)
+            {
+                cout<<"[Ar] ";
+                start = 20;
+            }
+            else
+            {
+                if (numero > 36 && numero <= 54)
+                {
+                    cout<<"[Kr] ";
+                    start = 33;
+                }
+                else
+                {
+                    if (numero > 54 && numero <= 86)
+                    {
+                        cout<<"[Xe] ";
+                        start = 46;
+                    }
+                    else
+                    {
+                        if (numero > 86 && numero <= 118)
+                        {
+                            cout<<"[Rn] ";
+                            start = 64;
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    for (int i = start; i < semi.length(); i++)
+    {
+        if (semi[i] == ' ')
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                if (isdigit(semi[i-j-1]))
+                {
+                    num[1-j] = semi[i-j-1];
+                }
+                else
+                {
+                    num[1-j] = '0';
+                }
+                
+            }
+
+            for (int I = 1; I < atoi(num.c_str()) + 1; I++)
+            {
+                if (I%2 != 0)
+                {
+                    cout<<"[1/2|";
+                    if (I + 1 > atoi(num.c_str()))
+                    {
+                        cout<<"   ]";
+                    }
+                    
+                }
+                else
+                {
+                    cout<<"-1/2]";
+                }                
+            }
+            cout<<" ";
+            
+        }
+        num = "";
+    }
+    
+}
+//Hola
