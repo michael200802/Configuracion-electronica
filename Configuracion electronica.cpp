@@ -6,7 +6,153 @@
 #include<sstream>
 #include<conio.h>
 
+#include <vector>
+#include <algorithm>
+
 using namespace std;
+
+class capa_orbital
+{
+private:
+    const char simbolo;
+    const int indice;
+    const int max_electrones;
+
+protected:
+    capa_orbital(char simbolo_capa, int indice_capa, int max_electrones_capa) : simbolo(simbolo_capa),
+                                                                                indice(indice_capa),
+                                                                                max_electrones(max_electrones_capa)
+    {
+    }
+
+public:
+    int get_maximo_electrones() const
+    {
+        return this->max_electrones;
+    }
+
+    string to_str() const
+    {
+        ostringstream ss;
+        ss << this->indice << this->simbolo;
+        return ss.str();
+    }
+};
+
+class orbital_s : public capa_orbital
+{
+public:
+    orbital_s(int capa) : capa_orbital('s', capa, 2)
+    {
+    }
+};
+
+class orbital_p : public capa_orbital
+{
+public:
+    orbital_p(int capa) : capa_orbital('p', capa, 6)
+    {
+    }
+};
+
+class orbital_d : public capa_orbital
+{
+public:
+    orbital_d(int capa) : capa_orbital('d', capa, 10)
+    {
+    }
+};
+
+class orbital_f : public capa_orbital
+{
+public:
+    orbital_f(int level) : capa_orbital('f', level, 14)
+    {
+    }
+};
+
+class orbital
+{
+private:
+    const capa_orbital capa;
+    int electrones;
+
+public:
+    orbital(const capa_orbital &capa_orbital) : capa(capa_orbital)
+    {
+        this->electrones = 0;
+    }
+
+    int get_electrones()
+    {
+        return this->electrones;
+    }
+
+    int llenar(int electrones_restantes)
+    {
+        if (this->capa.get_maximo_electrones() > electrones_restantes)
+        {
+            this->electrones = electrones_restantes;
+            return 0;
+        }
+        this->electrones = this->capa.get_maximo_electrones();
+        return electrones_restantes - this->electrones;
+    }
+
+    string to_str()
+    {
+        ostringstream ss;
+        ss << this->capa.to_str() << this->electrones;
+        return ss.str();
+    }
+};
+
+string semidesarrollada_v2(int numero_atomico)
+{
+    orbital s1(orbital_s(1)); 
+    orbital s2(orbital_s(2)), p2(orbital_p(2)); 
+    orbital s3(orbital_s(3)), p3(orbital_p(3)), d3(orbital_d(3)); 
+    orbital s4(orbital_s(4)), p4(orbital_p(4)), d4(orbital_d(4)), f4(orbital_f(4));  
+    orbital s5(orbital_s(5)), p5(orbital_p(5)), d5(orbital_d(5)), f5(orbital_f(5)); 
+    orbital s6(orbital_s(6)), p6(orbital_p(6)), d6(orbital_d(6)); 
+    orbital s7(orbital_s(7)), p7(orbital_p(7));
+    
+    vector<orbital *> impresion_orbitales = {
+        &s1,
+        &s2, &p2,
+        &s3, &p3, &d3,
+        &s4, &p4, &d4, &f4,
+        &s5, &p5, &d5, &f5,
+        &s6, &p6, &d6,
+        &s7, &p7};
+
+    vector<orbital *> calculo_orbitales = {
+        &s1,
+        &s2,
+        &p2, &s3,
+        &p3, &s4,
+        &d3, &p4, &s5,
+        &d4, &p5, &s6,
+        &f4, &d5, &p6, &s7,
+        &f5, &d6, &p7};
+
+    vector<orbital *>::iterator iter = calculo_orbitales.begin();
+    do
+    {
+        numero_atomico = (*iter)->llenar(numero_atomico);
+        iter++;
+    } while (numero_atomico > 0 && iter != calculo_orbitales.end());
+
+    ostringstream ss;
+    for_each(impresion_orbitales.begin(), impresion_orbitales.end(),
+             [&ss](orbital *orb) {
+                 if (orb->get_electrones() > 0)
+                 {
+                     ss << orb->to_str() << ' ';
+                 }
+             });
+    return ss.str();
+}
 
 void gotoxy(int x,int y);
 
@@ -26,6 +172,10 @@ int main(){
     string configuracion_electronica_semi;
     input(x);
     configuracion_electronica_semi = semidesarrollada(x);
+    abreviada(x,configuracion_electronica_semi);
+    orbitales(configuracion_electronica_semi,x);
+    configuracion_electronica_semi = semidesarrollada_v2(x); 
+    cout << endl << "Semidesarrollada v2: " << endl << configuracion_electronica_semi;
     abreviada(x,configuracion_electronica_semi);
     orbitales(configuracion_electronica_semi,x);
     cout<<endl;
